@@ -1,8 +1,12 @@
 package com.revature.eval.java.core;
 
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 public class EvaluationService {
 
@@ -30,8 +34,22 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String acronym(String phrase) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		phrase = phrase.trim();
+		String[] acroymnArray = phrase.split(" ");
+		
+		String acronym = "";
+		for (String s : acroymnArray) {
+			acronym += s.charAt(0);
+			if (s.contains("-")){
+				int index = s.indexOf("-");
+				acronym += s.charAt(index + 1);
+//				String[] seperateDashes = s.split("-");
+//				for (String s1: seperateDashes) {
+//					acronym += s1.charAt(0);
+//				}
+			}
+		}
+		return acronym.toUpperCase();
 	}
 
 	/**
@@ -84,18 +102,24 @@ public class EvaluationService {
 		}
 
 		public boolean isEquilateral() {
-			// TODO Write an implementation for this method declaration
-			return false;
+			if(this.getSideOne() == this.getSideTwo() && this.getSideTwo() == this.getSideThree()){
+				return true;
+			}else
+				return false;
 		}
 
 		public boolean isIsosceles() {
-			// TODO Write an implementation for this method declaration
-			return false;
+			if (this.getSideOne() == this.getSideTwo() || this.getSideOne() == this.getSideThree() || this.getSideTwo() == this.getSideThree()) {
+				return true;
+			}else 
+				return false;
 		}
 
 		public boolean isScalene() {
-			// TODO Write an implementation for this method declaration
-			return false;
+			if(this.getSideOne() != this.getSideTwo() && this.getSideOne() != this.getSideThree() && this.getSideTwo() != this.getSideThree()) {
+				return true;
+			}else 
+				return false;
 		}
 
 	}
@@ -116,8 +140,56 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getScrabbleScore(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		String scrabbleWord;
+		
+		scrabbleWord = string.toUpperCase();
+		
+		char[] scrabbleWordCharArray = scrabbleWord.toCharArray();
+		
+		int score = 0;
+		
+		for (Character singleLetter : scrabbleWordCharArray) {
+			switch (singleLetter){
+				case 'G':
+				case 'D':
+					score += 2;
+					break;
+
+				case 'B':
+				case 'C':
+				case 'M':
+				case 'P':
+					score += 3;
+					break;
+
+				case 'F':
+				case 'H':
+				case 'V':
+				case 'W':
+				case 'Y':
+					score += 4;
+					break;
+
+				case 'K':
+					score += 5;
+					break;
+
+				case 'J':
+				case 'X':
+					score += 8;
+					break;
+
+				case 'Q':
+				case 'Z':
+					score += 10;
+					break;
+
+				default:
+					score += 1;
+			}
+		}
+		
+		return score;
 	}
 
 	/**
@@ -152,8 +224,34 @@ public class EvaluationService {
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
 	public String cleanPhoneNumber(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		String number;
+		String cleanedUpNumber = "";
+		
+		string = string.trim();
+		number = string.replaceAll("[()-.+,]", "");
+		number = number.trim();
+		char firstNumber = number.charAt(0);
+		if (firstNumber == '1') {
+			number = number.substring(1);
+			number = number.trim();
+			//cleanedUpNumber = number;
+		}
+		if(number.indexOf(" ") == 3) {
+			String[] numberArray = number.split(" ");
+			cleanedUpNumber = "";
+			for (String s : numberArray) {
+				cleanedUpNumber += s;
+			}
+			return cleanedUpNumber;
+		}
+		
+//		if(cleanedUpNumber.length() > 10) {
+//			throw
+//		}
+		
+		return number;
+		
+		//return null;
 	}
 
 	/**
@@ -166,8 +264,26 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Map<String, Integer> wordCount(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		// Use TreeMap to hold words as key and count as value
+		Map<String, Integer> map = new TreeMap<>();
+		
+		String[] wordsArray = string.split("[ \n\t\r.,;:!?(){}]");
+		for(int i = 0; i < wordsArray.length; i++) {
+			String key = wordsArray[i].toLowerCase();
+			
+			if(key.length() > 0) {
+				if (!map.containsKey(key)) {
+					map.put(key, 1);
+				}
+				else {
+					int value = map.get(key);
+					value++;
+					map.put(key, value);
+				}
+			}
+		}
+		
+		return map;
 	}
 
 	/**
@@ -210,7 +326,24 @@ public class EvaluationService {
 
 		public int indexOf(T t) {
 			// TODO Write an implementation for this method declaration
-			return 0;
+			List<T> array = new ArrayList<>();
+			array = this.getSortedList();
+			int start = 0;
+			int end = array.size();
+			while (start <= end) {
+				int mid = Math.floorDiv((start + end), 2);
+				if ((array.get(mid)).equals(t) == true) {
+					return mid;
+				}
+				if (BinarySearch.this.getSortedList().get(mid).toString().compareTo(t.toString()) > 0) {
+					end = mid - 1;
+				}
+				else {
+					start = mid + 1;
+				}
+			}
+			// Object not found
+			return -1;
 		}
 
 		public BinarySearch(List<T> sortedList) {
@@ -281,8 +414,27 @@ public class EvaluationService {
 	 * @return
 	 */
 	public List<Long> calculatePrimeFactorsOf(long l) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		List<Long> primeFactorList = new ArrayList<Long>();
+		
+		while(l % 2 == 0) {
+			l /= 2;
+		}
+		for (int i = 3; i <= Math.sqrt(l); i += 2) { 
+            // While i divides l, add i to list and divide l
+            while (l % i == 0) { 
+                primeFactorList.add((long) i);
+                l /= i; 
+            } 
+        } 
+		
+		if (l > 2) {
+			primeFactorList.add((long) 2);
+		}
+		
+		if (primeFactorList.isEmpty())
+			return null;
+		else
+			return primeFactorList;
 	}
 
 	/**
